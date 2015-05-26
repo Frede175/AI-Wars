@@ -5,7 +5,7 @@ using System;
 
 public class Map : MonoBehaviour {
 
-	public bool onlyDisplayPath;
+	public bool DrawGizmos;
 	public Transform ground;
 	public LayerMask noneWalkable;
 	public float gridRadius;
@@ -21,7 +21,7 @@ public class Map : MonoBehaviour {
 	float gridDiameter;
 	Vector2 WorldBottomOfMap;
 
-	void Start()
+	void Awake()
 	{
 		cubeWidth =  ground.lossyScale.x;
 		cubeHeight = ground.lossyScale.y;
@@ -87,44 +87,15 @@ public class Map : MonoBehaviour {
 		return neighbours;
 	}
 
-	public List<Node> path;
-
 	void OnDrawGizmos()
 	{
-		if (nodes != null)
+		if (nodes != null && DrawGizmos)
 		{
-			if (onlyDisplayPath)
+			Gizmos.color = gridColor;
+			foreach (Node n in nodes)
 			{
-				foreach (Node n in nodes)
-				{
-					Gizmos.color = n.isWalkable?gridColor:Color.red;
-					if (path != null)
-					{
-						if (path.Contains(n))
-						{
-							Gizmos.color = Color.green;
-							Gizmos.DrawCube(new Vector3(n.worldPos.x, n.worldPos.y, 0), Vector3.one * (gridDiameter-.1f));
-						}
-					}
-				}
-			}
-			else
-			{
-				Gizmos.color = gridColor;
-				foreach (Node n in nodes)
-				{
-					Gizmos.color = n.isWalkable?gridColor:Color.red;
-					if (path != null)
-					{
-						if (path.Contains(n))
-						{
-							Gizmos.color = Color.green;
-						}
-					}
-						
-
-					Gizmos.DrawCube(new Vector3(n.worldPos.x, n.worldPos.y, 0), Vector3.one * (gridDiameter-.1f));
-				}
+				Gizmos.color = n.isWalkable?gridColor:Color.red;
+				Gizmos.DrawCube(new Vector3(n.worldPos.x, n.worldPos.y, 0), Vector3.one * (gridDiameter-.1f));
 			}
 		}
 	}

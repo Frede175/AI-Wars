@@ -1,41 +1,38 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class Pathfinding : MonoBehaviour {
 
-	public Transform seeker, target;
-
-
-	Node sNode;
-	Node tNode;
-
+	public bool simple = true;
 	Map map;
+	PathManager pathManager;
 
 	void Awake()
 	{
 		map = GetComponent<Map>();
-
+		pathManager = GetComponent<PathManager>();
 	}
 
-	void Update()
+	public void StartFindingPath(Vector3 start, Vector3 end)
 	{
-			FindPath(new Vector2(seeker.position.x, seeker.position.y), new Vector2(target.position.x, target.position.y));
+		start = new Vector2 (start.x, start.y);
+		end = new Vector2 (end.x, end.y);
+		StartCoroutine(FindPath(start, end));
 	}
 
 
-	public void FindPath(Vector2 startPos, Vector2 targetPos)
+	IEnumerator FindPath(Vector2 startPos, Vector2 targetPos)
 	{
 		Node startNode =  map.WorldPointToGridPoint(startPos);
 		Node targetNode = map.WorldPointToGridPoint(targetPos);
-		if (sNode == startNode && tNode == targetNode)
-			return;
-		else
-		{
-			sNode = startNode;
-			tNode = targetNode;
-		}
-		
+
+		Vector2[] waypoints = new Vector2[0];
+		bool success = false;
+
+		if (!startNode.isWalkable && !targetNode.isWalkable)
+			yield break;
 
 		Heap<Node> openSet = new Heap<Node>(map.MaxSize);
 		HashSet<Node> closedSet = new HashSet<Node>();
@@ -48,9 +45,8 @@ public class Pathfinding : MonoBehaviour {
 
 			if (currentNode == targetNode)
 			{
-				GetPath(startNode, targetNode);
-
-				return;
+				success = true;
+				break;
 			}
 
 			foreach (Node neighbour in map.GetNeighbours(currentNode))
@@ -77,12 +73,17 @@ public class Pathfinding : MonoBehaviour {
 
 				}
 			}
-
 		}
+		yield return null;
+		if (success)
+		{
+			waypoints = GetPath(startNode, targetNode);
+		}
+		pathManager.FinishedProcessingPath(waypoints, success);
 
 	}
 
-	void GetPath(Node startNode, Node endNode)
+	Vector2[] GetPath(Node startNode, Node endNode)
 	{
 		List<Node> path = new List<Node>();
 		Node trackNode = endNode;
@@ -92,10 +93,45 @@ public class Pathfinding : MonoBehaviour {
 			path.Add(trackNode);
 			trackNode = trackNode.parent;
 		}
-		path.Add(trackNode);
-		path.Reverse();
-		map.path = path;
+		Vector2[] newPath;
+		if (simple)
+		{
+			newPath = simplePath(path);
+		}
+		else
+		{
+			newPath = convertToVector2(path);
+		}
+		Array.Reverse(newPath);
+		return newPath;
 
+	}
+
+	Vector2[] simplePath(List<Node> path)
+	{
+		List<Vector2> waypoints = new List<Vector2>();
+		Vector2 dirOld = Vector2.zero;
+		waypoints.Add(path[0].worldPos);
+		for (int a = 1; a < path.Count; a++)
+		{
+			Vector2 dirNew = new Vector2 (path[a].nodeX - path[a-1].nodeX, path[a].nodeY - path[a-1].nodeY);
+			if (dirNew != dirOld)
+			{
+				waypoints.Add(path[a].worldPos);
+			}
+			dirOld = dirNew;
+		}
+		return waypoints.ToArray();
+	}
+
+	Vector2[] convertToVector2(List<Node> path)
+	{
+		List<Vector2> waypoints = new List<Vector2>();
+		foreach (Node n in path)
+		{
+			waypoints.Add(n.worldPos);
+		}
+		return waypoints.ToArray();
 	}
 
 	int DistanceBetween(Node nodeA, Node nodeB)
