@@ -3,17 +3,18 @@ using System.Collections;
 
 public class Game : MonoBehaviour {
 
-	// Use this for initialization
+
+
 	void Start () {
 	
 	}
 	
-	// Update is called once per frame
+
 	void Update () {
 	
 	}
 
-	public void SpawnUnit(Vector3 worldPos, Units unit, int teamNumber)
+	public void SpawnUnit(Vector3 worldPos, string unit, int teamNumber)
 	{
 
 	}
