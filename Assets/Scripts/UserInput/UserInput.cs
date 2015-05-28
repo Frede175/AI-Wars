@@ -4,23 +4,23 @@ using RTS;
 
 public class UserInput : MonoBehaviour {
 
-	private Players player;
+	private Player player;
 	public Transform mapArea;
-	public bool Human;
 	Vector3 WorldBottomOfMap;
 
 	float mapWidth, mapHeight;
 
 	// Use this for initialization
-	void Awake () {
-		player = transform.root.GetComponent< Players >();
+	void Start() {
+		player = transform.root.GetComponent<Player>();
 		mapWidth =  mapArea.lossyScale.x;
 		mapHeight = mapArea.lossyScale.y;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		MoveCamera();
+		if (player.human)
+			MoveCamera();
 	}
 
 	void MoveCamera()
