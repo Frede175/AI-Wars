@@ -48,7 +48,7 @@ public class Unit : MonoBehaviour {
 
 	IEnumerator PathMove()
 	{
-		Vector3 currentWaypoint = new Vector3(path[0].x, path[0].y, 0);
+		Vector3 currentWaypoint = new Vector3(path[0].x, path[0].y, -0.5f);
 
 		while (true)
 		{
@@ -57,7 +57,7 @@ public class Unit : MonoBehaviour {
 				targetIndex++;
 				if (targetIndex >= path.Length)
 					yield break;
-				currentWaypoint = new Vector3(path[targetIndex].x, path[targetIndex].y, 0);
+				currentWaypoint = new Vector3(path[targetIndex].x, path[targetIndex].y, -0.5f);
 			}
 
 			transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, speed * Time.deltaTime);
@@ -73,7 +73,7 @@ public class Unit : MonoBehaviour {
 			Gizmos.color = Color.black;
 			for (int i = targetIndex; i < path.Length; i++)
 			{
-				Gizmos.color = Color.black;
+				Gizmos.color = Color.white;
 				Gizmos.DrawCube(new Vector3(path[i].x, path[i].y, 0), new Vector3(0.2f, 0.2f, 0.2f));
 
 				if (i == targetIndex)
