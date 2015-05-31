@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Building : WorldObjects {
 
-	public enum buildingType { Factory, MoneyCollector }
+	Queue<string> buildQueue;
 
 	protected override void Awake() {
 		base.Awake();

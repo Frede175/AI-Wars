@@ -7,7 +7,6 @@ public class WorldObjects : MonoBehaviour {
 	public string objectName;
 	public int cost, sellValue, maxHealth, toughness;
 	public bool canMove = false;
-	public GameObject owner;
 
 	protected string[] actions = {};
 	protected Player player;
@@ -26,6 +25,7 @@ public class WorldObjects : MonoBehaviour {
 	protected virtual void Start()
 	{
 		player = transform.root.GetComponent<Player>();
+		SetColor();
 	}
 
 	protected virtual void Update()
@@ -94,6 +94,22 @@ public class WorldObjects : MonoBehaviour {
 		if (controller.SelectedObject) controller.SelectedObject.SetSelection(false, playingArea);
 		controller.SelectedObject = worldObject;
 		worldObject.SetSelection(true, controller.hud.GetPlayingArea());
+	}
+
+	public void SetColor()
+	{
+		SpriteRenderer sprite = gameObject.GetComponent<SpriteRenderer>();
+		sprite.color = player.color;
+
+
+	}
+
+	public bool IsOwnedBy(Player controller)
+	{
+		if (player.Equals(controller))
+			return true;
+		else
+			return false;
 	}
 	
 }

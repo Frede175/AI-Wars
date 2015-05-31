@@ -1,15 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Random = UnityEngine.Random;
 
 public class Tank : Unit {
 
 
-	public float damage;
+	public float damage = 2f;
 	public float rangeRadius;
 	public float turnSpeed;
 	public float firingRate;
-	public float spawnDistance = 1;
+	public float spawnDistance = 1.5f;
+
+	//Bullet settings
+	public float bulletSpeed = 100f;
+	public float accuracy = 20f;
 
 
 	private float lastShot = 0f;
@@ -42,6 +47,10 @@ public class Tank : Unit {
 				GameObject bullet = ObjectPooling.objectPooling.GetObjectFromList();
 				bullet.transform.position = transform.position + (transform.up*spawnDistance);
 				bullet.transform.rotation = transform.rotation;
+				Bullet bul = bullet.GetComponent<Bullet>();
+				bul.velocity = transform.rotation * new Vector3 ( Random.Range(-accuracy, accuracy ), bulletSpeed * Random.Range(0.9f, 1.1f));
+				bul.damage = damage;
+				bul.color = player.color;
 				bullet.SetActive(true);
 				lastShot = Time.time;
 			}
@@ -73,7 +82,7 @@ public class Tank : Unit {
 			if (hitColliders[i].gameObject == gameObject)
 				continue;
 
-			if (hitColliders[i].gameObject.tag == "Unit" /*&& owner != hitColliders[i].gameObject.transform.GetComponent<WorldObjects>().owner*/)
+			if (hitColliders[i].gameObject.tag == "Unit" && !hitColliders[i].gameObject.transform.GetComponent<WorldObjects>().IsOwnedBy(player))
 			{
 				float distance = Vector3.Distance(transform.position, hitColliders[i].gameObject.transform.position);
 				if (distance < targetDistance)

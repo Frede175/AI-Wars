@@ -3,24 +3,50 @@ using System.Collections;
 
 public class Bullet : MonoBehaviour {
 
+	public float damage;
+	public Vector3 velocity;
+	public Color color;
+	TrailRenderer trail;
+	SpriteRenderer renderer;
 
-	public float speed = 100f;
-	public float damage = 2f;
+	private bool alive = false;
 
+
+	void Awake()
+	{
+		renderer = gameObject.GetComponent<SpriteRenderer>();
+		trail = gameObject.GetComponent<TrailRenderer>();
+	}
 
 	void OnEnable()
 	{
+		SetColor();
+		alive = true;
 		Invoke("Destory", 1f);
 	}
 
 	void Destory()
 	{
+
+		transform.position = new Vector3 (0, 0, 100);
+		trail.time = -1;
+		Invoke("ResetTrail", 0.02f);
+
+	}
+
+	void ResetTrail()
+	{
+		trail.time = 0.05f;
 		gameObject.SetActive(false);
 	}
 	
-	void Update()
+	void FixedUpdate()
 	{
-		transform.position +=  transform.up * speed * Time.deltaTime;
+		if (alive)
+		{
+			CastRay();
+			transform.position +=  velocity * Time.fixedDeltaTime;
+		}
 	}
 
 
@@ -29,10 +55,24 @@ public class Bullet : MonoBehaviour {
 		CancelInvoke();
 	}
 
-	void OnTriggerEnter(Collider collider)
+	void CastRay()
 	{
-		if (collider.gameObject.tag != "Laser")
-			gameObject.SetActive(false);
+		Ray ray = new Ray (transform.position, transform.up * velocity.magnitude * Time.fixedDeltaTime);
+		RaycastHit hit;
 
+		if (Physics.Raycast(ray, out hit, velocity.magnitude * Time.fixedDeltaTime, 9))
+		{
+			if (hit.collider.gameObject.tag == "Unit" || hit.collider.gameObject.tag == "Building" && hit.collider.gameObject.layer != gameObject.layer)
+			{
+				alive = false;
+				Destory();
+			}
+		}
+	}
+
+	void SetColor()
+	{
+		trail.material.SetColor("_TintColor", color);
+		renderer.material.SetColor("_TintColor", color);
 	}
 }
