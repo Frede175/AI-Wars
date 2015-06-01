@@ -5,7 +5,8 @@ using RTS;
 public class WorldObjects : MonoBehaviour {
 
 	public string objectName;
-	public int cost, sellValue, maxHealth, toughness;
+	public int cost, sellValue, toughness;
+	public float health;
 	public bool canMove = false;
 
 	protected string[] actions = {};
@@ -26,6 +27,7 @@ public class WorldObjects : MonoBehaviour {
 	{
 		player = transform.root.GetComponent<Player>();
 		SetColor();
+		CheckAlive ();
 	}
 
 	protected virtual void Update()
@@ -62,6 +64,11 @@ public class WorldObjects : MonoBehaviour {
 		{
 			selectionBounds.Encapsulate(r.bounds);
 		}
+	}
+
+	public void CalculateSlider()
+	{
+
 	}
 
 	public void SetSelection(bool selected, Rect playingArea) 
@@ -111,5 +118,19 @@ public class WorldObjects : MonoBehaviour {
 		else
 			return false;
 	}
+
+	public void TakeDamage(float damage)
+	{
+		health -= damage-toughness/100;
+		CheckAlive ();
+	}
+
+	public void CheckAlive()
+	{
+		if (health <= 0) {
+			Destroy(gameObject);
+		}
+	}
+
 	
 }

@@ -65,6 +65,7 @@ public class Bullet : MonoBehaviour {
 			if (hit.collider.gameObject.tag == "Unit" || hit.collider.gameObject.tag == "Building" && hit.collider.gameObject.layer != gameObject.layer)
 			{
 				alive = false;
+				hit.collider.gameObject.SendMessage("TakeDamage", damage);
 				Destory();
 			}
 		}
