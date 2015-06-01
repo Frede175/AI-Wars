@@ -6,14 +6,18 @@ public class WorldObjects : MonoBehaviour {
 
 	public string objectName;
 	public int cost, sellValue, toughness;
-	public float health;
+	public float health, maxHealth;
 	public bool canMove = false;
+	public Texture2D healthActive;
+	public Texture2D healthDeActive;
+
 
 	protected string[] actions = {};
 	protected Player player;
 	protected bool isSelected;
 	protected Bounds selectionBounds;
 	protected Rect playingArea = new Rect(0.0f, 0.0f, 0.0f, 0.0f);
+
 
 
 
@@ -28,6 +32,7 @@ public class WorldObjects : MonoBehaviour {
 		player = transform.root.GetComponent<Player>();
 		SetColor();
 		CheckAlive ();
+		maxHealth = health;
 	}
 
 	protected virtual void Update()
@@ -48,12 +53,25 @@ public class WorldObjects : MonoBehaviour {
 		GUI.Box(selectBox, "");
 	}
 
+	private void DrawHealth(Rect selectBox)
+	{
+		//This is not working
+		GUI.skin = null;
+		GUI.BeginGroup(new Rect(selectBox.min.x, selectBox.min.y - 15f, selectBox.width, 8));
+			GUI.Box(new Rect(0,0, selectBox.width, 8), healthDeActive);
+			GUI.BeginGroup(new Rect(0,0, selectBox.width * Mathf.InverseLerp(0,1, health), 8));
+		    	GUI.Box(new Rect(0,0, selectBox.width, 8), healthActive);
+			GUI.EndGroup();
+		GUI.EndGroup();
+	}
+
 	private void DrawSelection()
 	{
 		GUI.skin = ResourceManager.GuiSelectBox;
 		Rect selectBox = WorkManager.CalcSelectionBox(selectionBounds, playingArea);
 		//GUI.BeginGroup(playingArea);
 		DrawSelectionBox(selectBox);
+		DrawHealth(selectBox);
 		//GUI.EndGroup();
 	}
 
@@ -64,11 +82,6 @@ public class WorldObjects : MonoBehaviour {
 		{
 			selectionBounds.Encapsulate(r.bounds);
 		}
-	}
-
-	public void CalculateSlider()
-	{
-
 	}
 
 	public void SetSelection(bool selected, Rect playingArea) 

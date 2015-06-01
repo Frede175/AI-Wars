@@ -21,6 +21,7 @@ namespace RTS
 			guiSelectBox = guiSkin;
 		}
 
+
 		private static Bounds invalidBounds = new Bounds(new Vector3(-99999, -99999, -99999), new Vector3(0, 0, 0));
 		public static Bounds InvalidBounds { get { return invalidBounds; } }
 
