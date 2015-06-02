@@ -6,8 +6,9 @@ public class Bullet : MonoBehaviour {
 	public float damage;
 	public Vector3 velocity;
 	public Color color;
+	public LayerMask ignoreLayer;
 	TrailRenderer trail;
-	SpriteRenderer renderer;
+	new SpriteRenderer renderer;
 
 	private bool alive = false;
 
@@ -60,9 +61,9 @@ public class Bullet : MonoBehaviour {
 		Ray ray = new Ray (transform.position, transform.up * velocity.magnitude * Time.fixedDeltaTime);
 		RaycastHit hit;
 
-		if (Physics.Raycast(ray, out hit, velocity.magnitude * Time.fixedDeltaTime, 9))
+		if (Physics.Raycast(ray, out hit, velocity.magnitude * Time.fixedDeltaTime))
 		{
-			if (hit.collider.gameObject.tag == "Unit" || hit.collider.gameObject.tag == "Building" && hit.collider.gameObject.layer != gameObject.layer)
+			if ((hit.collider.gameObject.tag == "Unit" || hit.collider.gameObject.tag == "Building") && hit.collider.gameObject.layer != ignoreLayer)
 			{
 				alive = false;
 				hit.collider.gameObject.SendMessage("TakeDamage", damage);

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 
 namespace RTS
@@ -15,16 +16,47 @@ namespace RTS
 
 		//GUI
 		private static GUISkin guiSelectBox;
+		private static Texture2D  healthActive, healthDeActive;
 		public static GUISkin GuiSelectBox { get { return guiSelectBox; } }
-		public static void storeGuiSelectBox (GUISkin guiSkin)
+		public static Texture2D HealthActive { get { return healthActive; } }
+		public static Texture2D HealthDeActive { get { return healthDeActive; } }
+		public static void storeHUDVars (GUISkin guiSkin, Texture2D _healthActive, Texture2D _healthDeActive)
 		{
 			guiSelectBox = guiSkin;
+			healthActive = _healthActive;
+			healthDeActive = _healthDeActive;
 		}
 
 
 		private static Bounds invalidBounds = new Bounds(new Vector3(-99999, -99999, -99999), new Vector3(0, 0, 0));
 		public static Bounds InvalidBounds { get { return invalidBounds; } }
 
+
+		private static GameObjectList objectList;
+		public static void SetObjectList(GameObjectList _objectList)
+		{
+			objectList = _objectList;
+		}
+
+		public static GameObject GetUnit(string name)
+		{
+			return objectList.GetUnit(name);
+		}
+
+		public static GameObject GetBuilding(string name)
+		{
+			return objectList.GetBuilding(name);
+		}
+
+		public static GameObject GetWorldObject(string name)
+		{
+			return objectList.GetWorldObject(name);
+		}
+
+		public static GameObject GetPlayer()
+		{
+			return objectList.GetPlayer();
+		}
 	}
 }
 

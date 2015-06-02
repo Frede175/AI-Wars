@@ -8,8 +8,6 @@ public class WorldObjects : MonoBehaviour {
 	public int cost, sellValue, toughness;
 	public float health, maxHealth;
 	public bool canMove = false;
-	public Texture2D healthActive;
-	public Texture2D healthDeActive;
 
 
 	protected string[] actions = {};
@@ -25,6 +23,7 @@ public class WorldObjects : MonoBehaviour {
 	{
 		selectionBounds = ResourceManager.InvalidBounds;
 		CalculateBounds();
+
 	}
 
 	protected virtual void Start()
@@ -57,11 +56,12 @@ public class WorldObjects : MonoBehaviour {
 	{
 		//This is not working
 		GUI.skin = null;
-		GUI.BeginGroup(new Rect(selectBox.min.x, selectBox.min.y - 15f, selectBox.width, 8));
-			GUI.Box(new Rect(0,0, selectBox.width, 8), healthDeActive);
-			GUI.BeginGroup(new Rect(0,0, selectBox.width * Mathf.InverseLerp(0,1, health), 8));
-		    	GUI.Box(new Rect(0,0, selectBox.width, 8), healthActive);
-			GUI.EndGroup();
+		float height = selectBox.height/8;
+		GUI.BeginGroup(new Rect(selectBox.min.x, selectBox.min.y - 15f, selectBox.width, height));
+		GUI.DrawTexture(new Rect(0,0,selectBox.width, height), ResourceManager.HealthDeActive);
+		GUI.BeginGroup(new Rect(0,0, selectBox.width * health/maxHealth, height));
+		GUI.DrawTexture(new Rect(0,0, selectBox.width, height), ResourceManager.HealthActive);
+		GUI.EndGroup();
 		GUI.EndGroup();
 	}
 
@@ -95,17 +95,17 @@ public class WorldObjects : MonoBehaviour {
 
 		if (isSelected && hitObject && hitObject.name != "Board")
 		{
-			WorldObjects worldObject = hitObject.transform.root.GetComponent< WorldObjects >();
+			WorldObjects worldObject = hitObject.transform.GetComponent< WorldObjects >();
 			if(worldObject)
 			{
 				ChangeSelection(worldObject, controller);
 			}
 		}
-		else if (!controller.SelectedObject.canMove)
+		/*else if (!controller.SelectedObject.canMove)
 		{
 			controller.SelectedObject.SetSelection(false, controller.hud.GetPlayingArea());
 			controller.SelectedObject = null;
-		}
+		}*/
 	}
 
 	private void ChangeSelection(WorldObjects worldObject, Player controller)
@@ -144,6 +144,27 @@ public class WorldObjects : MonoBehaviour {
 			Destroy(gameObject);
 		}
 	}
+
+	public GameObject GetObjectByName(string name, string caller)
+	{
+		switch(caller)
+		{
+		case "Building":
+			return ResourceManager.GetUnit(name);
+		default:
+			return null;
+		}
+	}
+
+	public bool IsPlayerSet()
+	{
+		if (player != null)
+			return true;
+		else
+			return false;
+	}
+
+
 
 	
 }

@@ -9,10 +9,14 @@ public class HUD : MonoBehaviour {
 	private int hudWidth;
 	private int hudheight;
 	public GUISkin selectBox;
+	
+	public Texture2D healthActive;
+	public Texture2D healthDeActive;
+
 	// Use this for initialization
 	void Start () {
 		player = transform.root.GetComponent< Player >();
-		ResourceManager.storeGuiSelectBox(selectBox);
+		ResourceManager.storeHUDVars(selectBox, healthActive, healthDeActive);
 	}
 	
 	// Update is called once per frame

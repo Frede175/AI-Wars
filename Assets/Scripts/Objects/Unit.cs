@@ -5,18 +5,21 @@ using RTS;
 public class Unit : WorldObjects {
 
 	public float speed;
+	public float turnSpeed;
 	public bool moving;
+	[Tooltip("In seconds")]
+	public float buildTime = 5f;
 	private Vector2[] path;
 	private int targetIndex;
 
 
-	protected virtual void Awake()
+	protected override void Awake()
 	{
 		base.Awake();
 	}
 
 	// Use this for initialization
-	protected virtual void Start () {
+	protected override void Start () {
 		base.Start();
 		canMove = true;
 		moving = false;
@@ -25,12 +28,12 @@ public class Unit : WorldObjects {
 	}
 	
 	// Update is called once per frame
-	protected virtual void Update () {
+	protected override void Update () {
 		base.Update();
 
 	}
 
-	protected virtual void OnGUI()
+	protected override void OnGUI()
 	{
 		base.OnGUI();
 	}
@@ -39,7 +42,7 @@ public class Unit : WorldObjects {
 	{
 		base.MouseClick(controller, hitObject, hitPoint);
 		
-		if (controller.human && isSelected)
+		if (controller.human && isSelected && IsOwnedBy(controller))
 		{
 			if (hitObject.name == "Board" && hitPoint != ResourceManager.InvalidPosition)
 			{

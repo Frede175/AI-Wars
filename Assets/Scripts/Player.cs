@@ -22,4 +22,12 @@ public class Player : MonoBehaviour{
 	void Update () {
 	
 	}
+
+	public void AddUnit(GameObject unit, Vector3 spawnPos, Quaternion rotation)
+	{
+		Units units = GetComponentInChildren< Units >();
+		GameObject newUnit = Instantiate(unit, spawnPos, rotation) as GameObject;
+		newUnit.transform.parent = units.transform;
+		
+	}
 }

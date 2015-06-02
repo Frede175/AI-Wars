@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using Random = UnityEngine.Random;
 
 public class Tank : Unit {
-
-
+	
 	public float damage = 2f;
 	public float rangeRadius;
-	public float turnSpeed;
 	public float firingRate;
-	public float spawnDistance = 1.5f;
+	public float spawnDistance = 1.5f; //For shooting
+
+
 
 	//Bullet settings
 	public float bulletSpeed = 100f;
@@ -29,7 +29,8 @@ public class Tank : Unit {
 	
 	protected override void Update () {
 		base.Update();
-		CheckForEnemies();
+		if (player != null)
+			CheckForEnemies();
 	}
 	
 	protected override void OnGUI() {
@@ -40,9 +41,9 @@ public class Tank : Unit {
 	{
 		RaycastHit hit;
 		Ray ray = new Ray (transform.position, transform.up);
-		if (Physics.Raycast(ray, out hit, rangeRadius,9))
+		if (Physics.Raycast(ray, out hit, rangeRadius))
 		{
-			if (hit.collider.gameObject == target && Time.time > lastShot + firingRate)
+			if (hit.collider.gameObject == target && Time.time > lastShot + firingRate && hit.collider.gameObject.layer != 9)
 			{
 				GameObject bullet = ObjectPooling.objectPooling.GetObjectFromList();
 				bullet.transform.position = transform.position + (transform.up*spawnDistance);
@@ -54,7 +55,6 @@ public class Tank : Unit {
 				bullet.SetActive(true);
 				lastShot = Time.time;
 			}
-
 		}
 		RotateToTarget(target.transform.position);
 	}
@@ -76,25 +76,38 @@ public class Tank : Unit {
 	{
 		Collider[] hitColliders = Physics.OverlapSphere(transform.position, rangeRadius);
 		float targetDistance = 99999;
-		GameObject target = null;
+		GameObject Unittarget = null;
+		GameObject	Buildingtarget = null;
 		for (int i = 0; i < hitColliders.Length; i++)
 		{
 			if (hitColliders[i].gameObject == gameObject)
 				continue;
 
-			if (hitColliders[i].gameObject.tag == "Unit" && !hitColliders[i].gameObject.transform.GetComponent<WorldObjects>().IsOwnedBy(player))
+			if (hitColliders[i].gameObject.tag == "Unit" || hitColliders[i].gameObject.tag == "Building")
 			{
-				float distance = Vector3.Distance(transform.position, hitColliders[i].gameObject.transform.position);
-				if (distance < targetDistance)
-				{
-					targetDistance = distance;
-					target = hitColliders[i].gameObject;
+				WorldObjects worldObject = hitColliders[i].gameObject.transform.GetComponent<WorldObjects>();
+				if (!worldObject.IsPlayerSet())
+					return;
 
+				if (!worldObject.IsOwnedBy(player))
+				{
+					float distance = Vector3.Distance(transform.position, hitColliders[i].gameObject.transform.position);
+					if (distance < targetDistance)
+					{
+						targetDistance = distance;
+						if (hitColliders[i].gameObject.tag == "Unit")
+							Unittarget = hitColliders[i].gameObject;
+						if (hitColliders[i].gameObject.tag == "Building")
+							Buildingtarget = hitColliders[i].gameObject;
+					}
 				}
 			}
+
 		}
 
-		if (target != null)
-			Shoot(target);
+		if (Unittarget != null)
+			Shoot(Unittarget);
+		else if (Buildingtarget != null)
+			Shoot(Buildingtarget);
 	}
 }

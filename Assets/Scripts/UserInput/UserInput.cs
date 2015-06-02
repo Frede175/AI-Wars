@@ -91,25 +91,24 @@ public class UserInput : MonoBehaviour {
 	}
 	
 	void RightMouse()
-	{	
+	{
+		DeselectObject();
+/*
 		if (player.SelectedObject && !player.SelectedObject.canMove)
 		{	
-			Debug.Log("Deselect");
-			DeselectObject();
+
 		}
 		else if (player.SelectedObject && player.SelectedObject.canMove)
 		{
-			Debug.Log("try to move");
 			GameObject worldObject = FindHitObject();
 			Vector3 worldPoint = FindHitPoint();
 			
 			if (worldObject.name == "Board" && worldPoint != ResourceManager.InvalidPosition)
 			{
-				Debug.Log("Mouse Click");
 				player.SelectedObject.MouseClick(player, worldObject, worldPoint);
 			}
 		}
-
+*/
 	}
 	
 	void MoveCamera()
