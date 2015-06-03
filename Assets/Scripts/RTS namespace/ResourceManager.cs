@@ -14,6 +14,14 @@ namespace RTS
 		private static Vector3 invalidPosition = new Vector3(-99999, -99999, -99999);
 		public static Vector3 InvalidPosition { get { return invalidPosition; } }
 
+		//Resourece for game:
+		public static int maxStartMoney { get { return 1500; } } 
+		public static int minStartMoney { get { return 1000; } }
+		public static int GetAverageStartMoney()
+		{
+			return (int)(maxStartMoney + minStartMoney)/2;
+		}
+
 		//GUI
 		private static GUISkin guiSelectBox;
 		private static Texture2D  healthActive, healthDeActive, processBar;
@@ -58,6 +66,11 @@ namespace RTS
 		public static GameObject GetPlayer()
 		{
 			return objectList.GetPlayer();
+		}
+
+		public static Texture2D GetBuildTexture(string name)
+		{
+			return objectList.GetBuildTexture(name);
 		}
 	}
 }

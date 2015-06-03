@@ -7,11 +7,13 @@ public class Unit : WorldObjects {
 	public float speed;
 	public float turnSpeed;
 	public bool moving;
+	public bool rotation;
 	[Tooltip("In seconds")]
 	public float buildTime = 5f;
 	private Vector2[] path;
 	private int targetIndex;
 
+	private float angel = 10f;
 
 	protected override void Awake()
 	{
@@ -78,7 +80,7 @@ public class Unit : WorldObjects {
 	IEnumerator FollowPath()
 	{
 		Vector3 currentWaypoint = new Vector3(path[0].x, path[0].y, -0.5f);
-		
+		CalculateBounds();
 		while (true)
 		{
 			if (transform.position == currentWaypoint)
@@ -91,10 +93,17 @@ public class Unit : WorldObjects {
 				}
 				currentWaypoint = new Vector3(path[targetIndex].x, path[targetIndex].y, -0.5f);
 			}
-			
+			//TODO Work on getting rotation slower.
+			//transform.rotation = Quaternion.Euler (0,0, Mathf.Atan2(currentWaypoint.y-transform.position.y, currentWaypoint.x-transform.position.x)*180 / Mathf.PI - 90f);
+
 			transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, speed * Time.deltaTime);
 			CalculateBounds();
 			yield return null;
 		}
+	}
+
+	void RotateToMovement()
+	{
+
 	}
 }

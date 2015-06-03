@@ -52,7 +52,7 @@ public class GameObjectList : MonoBehaviour {
 	{
 		for (int i = 0; i < worldObjects.Length; i++)
 		{
-			Building worldObject = worldObjects[i].GetComponent<Building>();
+			WorldObjects worldObject = worldObjects[i].GetComponent<WorldObjects>();
 			if (worldObject && worldObject.objectName == name) return worldObjects[i];
 			
 		}
@@ -63,6 +63,24 @@ public class GameObjectList : MonoBehaviour {
 	public GameObject GetPlayer()
 	{
 		return player;
+	}
+
+	public Texture2D GetBuildTexture(string name)
+	{
+		for (int i = 0; i < units.Length; i++)
+		{
+			Unit unit = units[i].GetComponent<Unit>();
+			if (unit && unit.objectName == name) return unit.BuildTexture;
+		}
+
+		for (int i = 0; i < buildings.Length; i++)
+		{
+			Building building = buildings[i].GetComponent<Building>();
+			if (building && building.objectName == name) return building.BuildTexture;
+			
+		}
+
+		return null;
 	}
 
 }

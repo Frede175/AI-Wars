@@ -52,6 +52,8 @@ public class Tank : Unit {
 				bul.velocity = transform.rotation * new Vector3 ( Random.Range(-accuracy, accuracy ), bulletSpeed * Random.Range(0.9f, 1.1f));
 				bul.damage = damage;
 				bul.color = player.color;
+				bul.parent = transform.position;
+				bul.range = rangeRadius;
 				bullet.SetActive(true);
 				lastShot = Time.time;
 			}
@@ -61,6 +63,7 @@ public class Tank : Unit {
 
 	void RotateToTarget(Vector3 position)
 	{
+		CalculateBounds();
 		Vector3 vT = position - transform.position;
 		vT.z = transform.position.z;
 		Quaternion qTarget;

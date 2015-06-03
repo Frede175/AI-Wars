@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: d8d2499ab957b1746959563de71a0557
-timeCreated: 1433018072
+guid: 44eea9dbf9b57a54eaa02a1f60214fd6
+timeCreated: 1433356881
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
@@ -30,7 +30,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     filterMode: -1
-    aniso: 16
+    aniso: -1
     mipBias: -1
     wrapMode: 1
   nPOTScale: 0
@@ -49,7 +49,7 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites: []
-  spritePackingTag: Cube Tank
+  spritePackingTag: 
   userData: 
   assetBundleName: 
   assetBundleVariant: 

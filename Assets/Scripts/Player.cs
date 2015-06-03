@@ -11,11 +11,15 @@ public class Player : MonoBehaviour{
 	public Color color;
 	public WorldObjects SelectedObject { get; set; }
 
+	//Resources
+	public int money;
+
 
 
 	// Use this for initialization
 	void Start () {
 		hud = GetComponentInChildren< HUD >();
+		money = ResourceManager.GetAverageStartMoney();
 	}
 	
 	// Update is called once per frame

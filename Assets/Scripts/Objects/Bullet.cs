@@ -7,6 +7,8 @@ public class Bullet : MonoBehaviour {
 	public Vector3 velocity;
 	public Color color;
 	public LayerMask ignoreLayer;
+	public Vector3 parent;
+	public float range;
 	TrailRenderer trail;
 	new SpriteRenderer renderer;
 
@@ -28,7 +30,7 @@ public class Bullet : MonoBehaviour {
 
 	void Destory()
 	{
-
+		alive = false;
 		transform.position = new Vector3 (0, 0, 100);
 		trail.time = -1;
 		Invoke("ResetTrail", 0.02f);
@@ -46,6 +48,10 @@ public class Bullet : MonoBehaviour {
 		if (alive)
 		{
 			CastRay();
+			if (Vector3.Distance(parent, transform.position) > range)
+			{
+				Destory();
+			}
 			transform.position +=  velocity * Time.fixedDeltaTime;
 		}
 	}
@@ -65,7 +71,6 @@ public class Bullet : MonoBehaviour {
 		{
 			if ((hit.collider.gameObject.tag == "Unit" || hit.collider.gameObject.tag == "Building") && hit.collider.gameObject.layer != ignoreLayer)
 			{
-				alive = false;
 				hit.collider.gameObject.SendMessage("TakeDamage", damage);
 				Destory();
 			}

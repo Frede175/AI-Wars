@@ -17,6 +17,7 @@ public class ObjectPooling : MonoBehaviour {
 		for (int i = 0; i < ObjectsToMakeAtStart; i++)
 		{
 			GameObject obj = (GameObject)Instantiate(objectToMake);
+			obj.transform.parent = transform;
 			obj.SetActive(false);
 			objects.Add(obj);
 		}

@@ -8,6 +8,7 @@ public class WorldObjects : MonoBehaviour {
 	public int cost, sellValue, toughness;
 	public float health, maxHealth;
 	public bool canMove = false;
+	public Texture2D BuildTexture;
 
 
 	protected string[] actions = {};
@@ -57,13 +58,11 @@ public class WorldObjects : MonoBehaviour {
 
 	protected virtual void DrawBars(Rect selectBox)
 	{
-
-
 		GUI.skin = null;
 		float height = selectBox.height/8;
 
 		//Health Bar
-		GUI.BeginGroup(new Rect(selectBox.min.x, selectBox.min.y - 15f - ((height-height/2)*healthBarLevel) , selectBox.width, height));
+		GUI.BeginGroup(new Rect(selectBox.min.x, selectBox.min.y - (height*1.5f) - ((height+height/2)*healthBarLevel) , selectBox.width, height));
 		GUI.DrawTexture(new Rect(0,0,selectBox.width, height), ResourceManager.HealthDeActive);
 		GUI.BeginGroup(new Rect(0,0, selectBox.width * health/maxHealth, height));
 		GUI.DrawTexture(new Rect(0,0, selectBox.width, height), ResourceManager.HealthActive);
@@ -155,11 +154,16 @@ public class WorldObjects : MonoBehaviour {
 	{
 		switch(caller)
 		{
-		case "Building":
+		case "Unit":
 			return ResourceManager.GetUnit(name);
 		default:
 			return null;
 		}
+	}
+
+	public Texture2D GetTextureByName(string name)
+	{
+		return ResourceManager.GetBuildTexture(name);
 	}
 
 	public bool IsPlayerSet()
