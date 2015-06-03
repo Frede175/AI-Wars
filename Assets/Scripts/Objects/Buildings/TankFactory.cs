@@ -4,7 +4,7 @@ using System.Collections;
 public class TankFactory : Building {
 
 	// Use this for initialization
-	void Start () {
+	protected override void Start () {
 		base.Start();
 		actions = new string[] {"Cube Tank", "Tank2"};
 	}

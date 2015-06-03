@@ -16,6 +16,9 @@ public class WorldObjects : MonoBehaviour {
 	protected Bounds selectionBounds;
 	protected Rect playingArea = new Rect(0.0f, 0.0f, 0.0f, 0.0f);
 
+	protected int healthBarLevel = 0;
+	protected bool isBuilding = false;
+
 
 
 
@@ -52,12 +55,15 @@ public class WorldObjects : MonoBehaviour {
 		GUI.Box(selectBox, "");
 	}
 
-	private void DrawHealth(Rect selectBox)
+	protected virtual void DrawBars(Rect selectBox)
 	{
-		//This is not working
+
+
 		GUI.skin = null;
 		float height = selectBox.height/8;
-		GUI.BeginGroup(new Rect(selectBox.min.x, selectBox.min.y - 15f, selectBox.width, height));
+
+		//Health Bar
+		GUI.BeginGroup(new Rect(selectBox.min.x, selectBox.min.y - 15f - ((height-height/2)*healthBarLevel) , selectBox.width, height));
 		GUI.DrawTexture(new Rect(0,0,selectBox.width, height), ResourceManager.HealthDeActive);
 		GUI.BeginGroup(new Rect(0,0, selectBox.width * health/maxHealth, height));
 		GUI.DrawTexture(new Rect(0,0, selectBox.width, height), ResourceManager.HealthActive);
@@ -71,7 +77,7 @@ public class WorldObjects : MonoBehaviour {
 		Rect selectBox = WorkManager.CalcSelectionBox(selectionBounds, playingArea);
 		//GUI.BeginGroup(playingArea);
 		DrawSelectionBox(selectBox);
-		DrawHealth(selectBox);
+		DrawBars(selectBox);
 		//GUI.EndGroup();
 	}
 

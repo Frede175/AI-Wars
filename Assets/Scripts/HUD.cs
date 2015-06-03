@@ -12,11 +12,12 @@ public class HUD : MonoBehaviour {
 	
 	public Texture2D healthActive;
 	public Texture2D healthDeActive;
+	public Texture2D processBar;
 
 	// Use this for initialization
 	void Start () {
 		player = transform.root.GetComponent< Player >();
-		ResourceManager.storeHUDVars(selectBox, healthActive, healthDeActive);
+		ResourceManager.storeHUDVars(selectBox, healthActive, healthDeActive, processBar);
 	}
 	
 	// Update is called once per frame

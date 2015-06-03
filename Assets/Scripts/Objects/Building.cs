@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using RTS;
 
 public class Building : WorldObjects {
 
@@ -33,7 +34,15 @@ public class Building : WorldObjects {
 	}
 	
 	protected override void OnGUI() {
+		if (currentBuildProcess > 0)
+			isBuilding = true;
+		else
+			isBuilding = false;
+
 		base.OnGUI();
+		if (isSelected)
+			DrawActions ();
+
 	}
 
 	private void ProcessQueue()
@@ -73,6 +82,14 @@ public class Building : WorldObjects {
 	void AddToQueue(string unitName)
 	{
 		buildQueue.Enqueue(unitName);
+	}
+
+	protected override void DrawBars(Rect selectBox)
+	{
+		base.DrawBars (selectBox);
+		float height = selectBox.height / 8;
+		GUI.BeginGroup(new Rect(selectBox.min.x, selectBox.min.y - 15f, selectBox.width, height));
+		GUI.DrawTexture (new Rect (0, 0, selectBox.width * currentBuildProcess / buildTimeForUnit, height), ResourceManager.ProcessBar);
 	}
 
 	public void DrawActions()

@@ -16,15 +16,17 @@ namespace RTS
 
 		//GUI
 		private static GUISkin guiSelectBox;
-		private static Texture2D  healthActive, healthDeActive;
+		private static Texture2D  healthActive, healthDeActive, processBar;
 		public static GUISkin GuiSelectBox { get { return guiSelectBox; } }
 		public static Texture2D HealthActive { get { return healthActive; } }
 		public static Texture2D HealthDeActive { get { return healthDeActive; } }
-		public static void storeHUDVars (GUISkin guiSkin, Texture2D _healthActive, Texture2D _healthDeActive)
+		public static Texture2D ProcessBar { get { return processBar; } }
+		public static void storeHUDVars (GUISkin guiSkin, Texture2D _healthActive, Texture2D _healthDeActive, Texture2D _processBar)
 		{
 			guiSelectBox = guiSkin;
 			healthActive = _healthActive;
 			healthDeActive = _healthDeActive;
+			processBar = _processBar;
 		}
 
 
