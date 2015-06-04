@@ -9,6 +9,7 @@ public class WorldObjects : MonoBehaviour {
 	public float health, maxHealth;
 	public bool canMove = false;
 	public Texture2D BuildTexture;
+	public bool isBought;
 
 
 	protected string[] actions = {};
@@ -33,8 +34,15 @@ public class WorldObjects : MonoBehaviour {
 	protected virtual void Start()
 	{
 		player = transform.root.GetComponent<Player>();
-		SetColor();
-		CheckAlive ();
+		if (player == null)
+			isBought = false;
+		else
+			isBought = true;
+		if (isBought)
+		{
+			SetColor();
+			CheckAlive ();
+		}
 		maxHealth = health;
 	}
 
@@ -172,6 +180,12 @@ public class WorldObjects : MonoBehaviour {
 			return true;
 		else
 			return false;
+	}
+
+
+	public void GetPositionToDeposit(Deposit deposit)
+	{
+
 	}
 
 

@@ -22,6 +22,9 @@ namespace RTS
 			return (int)(maxStartMoney + minStartMoney)/2;
 		}
 
+		public static int moneyPerMoneyBase { get { return 400; } }
+		public static int moneyTransfereSpeed { get { return 5; } }
+
 		//GUI
 		private static GUISkin guiSelectBox;
 		private static Texture2D  healthActive, healthDeActive, processBar;
