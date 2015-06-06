@@ -8,14 +8,18 @@ public class Deposit : Building {
 	public int transfereSpeed;
 	public Transform[] blocks;
 
+	private bool isEmpty;
+
 
 	private int numberOfBlocksDisplayed;
+	private Vector3 test;
 
 
 	protected override void Start () {
 		base.Start();
 		actions = new string[] {"Buy"};
 		moneyLeft = ResourceManager.moneyPerMoneyBase;
+		isEmpty = moneyLeft >= 0;
 		transfereSpeed = ResourceManager.moneyTransfereSpeed;
 		blocks = new Transform[4];
 		for (int i = 0; i < 4; i++)
@@ -23,20 +27,18 @@ public class Deposit : Building {
 			blocks[i] = transform.GetChild(i);
 		}
 		numberOfBlocksDisplayed = blocks.Length;
-	}
-	
-	// Update is called once per frame
-	protected override void Update () {
-		base.Update();
-		CalculateDeposit();
-		int money = TakeMoney();
+		FindPosition();
 	}
 
 	public int TakeMoney()
 	{
 		moneyLeft -= transfereSpeed;
 		CalculateDeposit();
-		if (moneyLeft <= 0) moneyLeft = 0;
+		if (moneyLeft <= 0)
+		{
+			moneyLeft = 0;
+			isEmpty = true;
+		}
 		return transfereSpeed;
 	}
 
@@ -69,8 +71,24 @@ public class Deposit : Building {
 		}
 
 		numberOfBlocksDisplayed = number;
+	}
 
+	//For testing
+	void OnDrawGizmos()
+	{
+		Gizmos.color = Color.white;
+		Gizmos.DrawCube(test, new Vector3(0.1f,0.1f,0.1f));
+	}
 
+	public bool IsEmpty()
+	{
+		return isEmpty;
+	}
+
+	public void FindPosition()
+	{
+		Vector3 position = transform.position + transform.up * (selectionBounds.max.y - selectionBounds.min.y)/2;
+		test = position; //Testing
 
 	}
 

@@ -34,10 +34,7 @@ public class WorldObjects : MonoBehaviour {
 	protected virtual void Start()
 	{
 		player = transform.root.GetComponent<Player>();
-		if (player == null)
-			isBought = false;
-		else
-			isBought = true;
+		isBought = !(player == null);
 		if (isBought)
 		{
 			SetColor();
@@ -180,12 +177,6 @@ public class WorldObjects : MonoBehaviour {
 			return true;
 		else
 			return false;
-	}
-
-
-	public void GetPositionToDeposit(Deposit deposit)
-	{
-
 	}
 
 

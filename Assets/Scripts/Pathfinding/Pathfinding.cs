@@ -77,13 +77,13 @@ public class Pathfinding : MonoBehaviour {
 		yield return null;
 		if (success)
 		{
-			waypoints = GetPath(startNode, targetNode);
+			waypoints = GetPath(startNode, targetNode, targetPos);
 		}
 		pathManager.FinishedProcessingPath(waypoints, success);
 
 	}
 
-	Vector2[] GetPath(Node startNode, Node endNode)
+	Vector2[] GetPath(Node startNode, Node endNode, Vector2 targetPos)
 	{
 		List<Node> path = new List<Node>();
 		Node trackNode = endNode;
@@ -96,18 +96,18 @@ public class Pathfinding : MonoBehaviour {
 		Vector2[] newPath;
 		if (simple)
 		{
-			newPath = simplePath(path);
+			newPath = simplePath(path, targetPos);
 		}
 		else
 		{
-			newPath = convertToVector2(path);
+			newPath = convertToVector2(path, targetPos);
 		}
 		Array.Reverse(newPath);
 		return newPath;
 
 	}
 
-	Vector2[] simplePath(List<Node> path)
+	Vector2[] simplePath(List<Node> path, Vector2 targetPos)
 	{
 		List<Vector2> waypoints = new List<Vector2>();
 		Vector2 dirOld = Vector2.zero;
@@ -121,10 +121,11 @@ public class Pathfinding : MonoBehaviour {
 			}
 			dirOld = dirNew;
 		}
+		waypoints[0] = targetPos;
 		return waypoints.ToArray();
 	}
 
-	Vector2[] convertToVector2(List<Node> path)
+	Vector2[] convertToVector2(List<Node> path, Vector2 targetPos)
 	{
 		List<Vector2> waypoints = new List<Vector2>();
 		foreach (Node n in path)
