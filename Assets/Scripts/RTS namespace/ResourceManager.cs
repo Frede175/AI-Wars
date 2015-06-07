@@ -22,7 +22,7 @@ namespace RTS
 			return (int)(maxStartMoney + minStartMoney)/2;
 		}
 
-		public static int moneyPerMoneyBase { get { return 400; } }
+		public static int moneyPerDeposit { get { return 400; } }
 		public static int moneyTransfereSpeed { get { return 5; } }
 
 		//GUI
@@ -74,6 +74,39 @@ namespace RTS
 		public static Texture2D GetBuildTexture(string name)
 		{
 			return objectList.GetBuildTexture(name);
+		}
+
+
+		//Deposits:
+		public static List<GameObject> availableDeposits = new List<GameObject>();
+		public static List<GameObject> noneAvailableDeposits = new List<GameObject>();
+
+		public static void MakeListsForDeposits()
+		{
+			availableDeposits = objectList.GetDeposits();
+		}
+
+		public static void AddToNoneAvailable(GameObject deposit)
+		{
+			if (availableDeposits.Contains(deposit)) 
+			{
+				noneAvailableDeposits.Add(deposit);
+				availableDeposits.Remove(deposit);
+			}
+		}
+
+		public static void AddToAvailbable(GameObject deposit)
+		{
+			if (noneAvailableDeposits.Contains(deposit)) 
+			{
+				availableDeposits.Add(deposit);
+				noneAvailableDeposits.Remove(deposit);
+			}
+		}
+
+		public static bool DepositIsAvailable(GameObject deposit)
+		{
+			return (availableDeposits.Contains(deposit));
 		}
 	}
 }

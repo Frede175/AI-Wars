@@ -34,4 +34,10 @@ public class Player : MonoBehaviour{
 		newUnit.transform.parent = units.transform;
 		
 	}
+
+	public void AddResource(GameObject building)
+	{
+		Buildings buildings = GetComponentInChildren<Buildings>();
+		building.transform.parent = buildings.transform;
+	}
 }

@@ -35,11 +35,12 @@ public class WorldObjects : MonoBehaviour {
 	{
 		player = transform.root.GetComponent<Player>();
 		isBought = !(player == null);
+
 		if (isBought)
 		{
 			SetColor();
-			CheckAlive ();
 		}
+		CheckAlive ();
 		maxHealth = health;
 	}
 

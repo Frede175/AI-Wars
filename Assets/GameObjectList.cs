@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using RTS;
 
 public class GameObjectList : MonoBehaviour {
@@ -7,6 +8,7 @@ public class GameObjectList : MonoBehaviour {
 	public GameObject[] units;
 	public GameObject[] buildings;
 	public GameObject[] worldObjects;
+	public List<GameObject> deposits;
 	public GameObject player;
 	private static bool created = false;
 
@@ -23,6 +25,27 @@ public class GameObjectList : MonoBehaviour {
 			Destroy(this);
 		}
 
+	}
+
+	void Start()
+	{
+		deposits = new List<GameObject>();
+		FindDeposits();
+		ResourceManager.MakeListsForDeposits();
+	}
+
+	void FindDeposits()
+	{
+		List<GameObject> childs = new List<GameObject>();
+		Transform depositsList = GameObject.Find("DepositsList").transform;
+		foreach (Transform child in depositsList)
+		{
+			if (child != depositsList)
+			{
+				if (child != null && child.gameObject != null) childs.Add(child.gameObject);
+			}
+		}
+		deposits = childs;
 	}
 
 	public GameObject GetUnit(string name)
@@ -81,6 +104,11 @@ public class GameObjectList : MonoBehaviour {
 		}
 
 		return null;
+	}
+
+	public List<GameObject> GetDeposits()
+	{
+		return deposits;
 	}
 
 }

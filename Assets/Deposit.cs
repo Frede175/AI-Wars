@@ -17,8 +17,7 @@ public class Deposit : Building {
 
 	protected override void Start () {
 		base.Start();
-		actions = new string[] {"Buy"};
-		moneyLeft = ResourceManager.moneyPerMoneyBase;
+		moneyLeft = ResourceManager.moneyPerDeposit;
 		isEmpty = moneyLeft >= 0;
 		transfereSpeed = ResourceManager.moneyTransfereSpeed;
 		blocks = new Transform[4];
@@ -44,7 +43,7 @@ public class Deposit : Building {
 
 	void CalculateDeposit()
 	{
-		float procent = (float)moneyLeft / ResourceManager.moneyPerMoneyBase;
+		float procent = (float)moneyLeft / ResourceManager.moneyPerDeposit;
 		if (procent > 0.75f)
 			DisplayBlocks(4);
 		else if (procent > 0.50f)
@@ -59,7 +58,6 @@ public class Deposit : Building {
 
 	void DisplayBlocks(int number)
 	{
-		Debug.Log(number);
 		for (int i = 0; i < 4; i++)
 		{
 			blocks[i].gameObject.SetActive(true);
@@ -90,6 +88,15 @@ public class Deposit : Building {
 		Vector3 position = transform.position + transform.up * (selectionBounds.max.y - selectionBounds.min.y)/2;
 		test = position; //Testing
 
+	}
+
+	public void Buy(Player controller)
+	{
+		ResourceManager.AddToNoneAvailable(gameObject);
+		controller.AddResource(gameObject);
+		player = transform.root.GetComponent<Player>();
+		SetColor();
+		isBought = true;
 	}
 
 

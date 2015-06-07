@@ -104,7 +104,7 @@ public class Building : WorldObjects {
 		GUI.EndGroup();
 	}
 
-	public void DrawActions()
+	protected virtual void DrawActions()
 	{
 		for (int i = 0; i < actions.Length;  i++)
 		{
@@ -126,5 +126,10 @@ public class Building : WorldObjects {
 			GUI.Box(new Rect(0,0,32,32), GetTextureByName(buildQueueArray[i]));
 			GUI.EndGroup();
 		}
+	}
+
+	public override void MouseClick(Player controller, GameObject hitObject, Vector3 hitPoint)
+	{
+		base.MouseClick(controller, hitObject, hitPoint);
 	}
 }
