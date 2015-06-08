@@ -132,4 +132,16 @@ public class Building : WorldObjects {
 	{
 		base.MouseClick(controller, hitObject, hitPoint);
 	}
+
+	public void Buy(Player controller)
+	{
+		if (isBought)
+			return;
+
+		ResourceManager.AddToNoneAvailable(gameObject);
+		player = transform.root.GetComponent<Player>();
+		SetColor();
+		isBought = true;
+	}
+
 }
