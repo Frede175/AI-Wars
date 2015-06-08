@@ -5,6 +5,8 @@ using RTS;
 public class CommandCenter : Building {
 
 	public bool isBuying;
+	public Vector3 spawnPos;
+	private string[] unitsNames = new string[] {"Builder"};
 
 
 	protected override void Start()
@@ -12,6 +14,7 @@ public class CommandCenter : Building {
 		base.Start();
 		isBuying = false;
 		actions = new string[] {"Buy desposit"};
+		spawnPos = transform.position + transform.up * (selectionBounds.max.y - selectionBounds.min.y)/1.5f;
 	}
 
 	public void GetMoney(float amount)
@@ -45,8 +48,15 @@ public class CommandCenter : Building {
 
 		if (isBuying && hitObject.tag == "Deposit" && ResourceManager.DepositIsAvailable(hitObject))
 		{
-			Deposit deposit = hitObject.GetComponent<Deposit>();
-			deposit.Buy(player);
+			GameObject unit = ResourceManager.GetUnit(unitsNames[0]);
+			Builder builder = unit.GetComponent<Builder>();
+			Vector3 spawn = hitPoint;
+			spawn.z = -0.5f;
+			builder.spawnPosForBuilding = spawn;
+			builder.isBuilt = true;
+			builder.buildingTobuild = "Deposit";
+			builder.building = hitObject;
+			player.AddUnit(unit, spawnPos, transform.rotation);
 		}
 
 	}

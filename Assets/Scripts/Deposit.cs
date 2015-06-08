@@ -90,14 +90,7 @@ public class Deposit : Building {
 
 	}
 
-	public void Buy(Player controller)
-	{
-		ResourceManager.AddToNoneAvailable(gameObject);
-		controller.AddResource(gameObject);
-		player = transform.root.GetComponent<Player>();
-		SetColor();
-		isBought = true;
-	}
+
 
 
 

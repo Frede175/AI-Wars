@@ -59,7 +59,13 @@ public class Unit : WorldObjects {
 
 	public void MoveUnit(Vector3 destination)
 	{
+		Debug.Log ("Move called");
 		PathManager.RequestPath(transform.position, destination, OnFinished);
+	}
+
+	public void StopMove()
+	{
+		StopCoroutine ("FollowPath");
 	}
 
 	void OnFinished(Vector2[] _path, bool success)

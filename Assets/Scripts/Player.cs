@@ -35,9 +35,21 @@ public class Player : MonoBehaviour{
 		
 	}
 
+	public void AddBuilding(GameObject Building, Vector3 spawnPos, Quaternion rotation)
+	{
+		Buildings buildings = GetComponentInChildren<Buildings> ();
+		GameObject newBuilding = Instantiate (Building, spawnPos, rotation) as GameObject;
+		newBuilding.transform.parent = buildings.transform;
+	}
+
 	public void AddResource(GameObject building)
 	{
 		Buildings buildings = GetComponentInChildren<Buildings>();
 		building.transform.parent = buildings.transform;
+		Building b = building.GetComponent<Building> ();
+		b.Buy (this);
+
 	}
+
+
 }
