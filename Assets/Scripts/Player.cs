@@ -11,6 +11,10 @@ public class Player : MonoBehaviour{
 	public Color color;
 	public WorldObjects SelectedObject { get; set; }
 
+
+	public GameObject commandCenterObj;
+	public CommandCenter commandCenter;
+
 	//Resources
 	public int money;
 
@@ -20,11 +24,15 @@ public class Player : MonoBehaviour{
 	void Start () {
 		hud = GetComponentInChildren< HUD >();
 		money = ResourceManager.GetAverageStartMoney();
+		commandCenter = commandCenterObj.GetComponent<CommandCenter>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if (commandCenterObj == null)
+		{
+			Destroy(gameObject);
+		}
 	}
 
 	public void AddUnit(GameObject unit, Vector3 spawnPos, Quaternion rotation)

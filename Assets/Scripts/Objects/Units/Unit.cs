@@ -59,7 +59,6 @@ public class Unit : WorldObjects {
 
 	public void MoveUnit(Vector3 destination)
 	{
-		Debug.Log ("Move called");
 		PathManager.RequestPath(transform.position, destination, OnFinished);
 	}
 

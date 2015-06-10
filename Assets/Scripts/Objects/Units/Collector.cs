@@ -34,7 +34,7 @@ public class Collector : Unit {
 			{
 				if (!deposit.IsEmpty())
 				{
-					money += deposit.TakeMoney();
+					//money += deposit.TakeMoney();
 					if (money >= maxMoneyLoad)
 					{
 						money = maxMoneyLoad;

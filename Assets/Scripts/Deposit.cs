@@ -8,8 +8,9 @@ public class Deposit : Building {
 	public int transfereSpeed;
 	public int delay;
 	public Transform[] blocks;
+	public Vector3 commandCenterPos;
 
-	private bool isEmpty;
+	private bool isEmpty = false;
 
 
 	private int numberOfBlocksDisplayed;
@@ -20,10 +21,11 @@ public class Deposit : Building {
 	protected override void Start () {
 		base.Start();
 		moneyLeft = ResourceManager.moneyPerDeposit;
-		isEmpty = moneyLeft >= 0;
 		transfereSpeed = ResourceManager.moneyTransfereSpeed;
+		transfereSpeed = 75;
+		delay = 10;
 		blocks = new Transform[4];
-		actions = new string[] {"Collector"};
+		actions = new string[] {"Delivery"};
 		for (int i = 0; i < 4; i++)
 		{
 			blocks[i] = transform.GetChild(i);
@@ -32,15 +34,26 @@ public class Deposit : Building {
 		FindPosition();
 	}
 
-	public int TakeMoney()
+	protected override void Update()
 	{
-		moneyLeft -= transfereSpeed;
-		CalculateDeposit();
-		if (moneyLeft <= 0)
+		base.Update();
+		if (isEmpty)
+			Destroy(gameObject);
+			
+	}
+
+	private int TakeMoney()
+	{
+
+		if (moneyLeft < transfereSpeed)
 		{
+			int money = moneyLeft;
 			moneyLeft = 0;
 			isEmpty = true;
+			return money;
 		}
+		moneyLeft -= transfereSpeed;
+		CalculateDeposit();
 		return transfereSpeed;
 	}
 
@@ -96,18 +109,23 @@ public class Deposit : Building {
 	public override void TakeOver(Player controller)
 	{
 		base.TakeOver (controller);
-
+		commandCenterPos = player.commandCenterObj.transform.position;
+		StartCoroutine("SendMoney");
 	}
 
 	IEnumerator SendMoney()
 	{
-		yield break;
-	}
-
-	private void SpawnUnits()
-	{
-		for (int i = 0; i < numberOfUnitsToSend; i++) {
-			GameObject unit = ResourceManager.GetUnit(actions[0]);
+		while (true)
+		{
+			for (int i = 0; i < numberOfUnitsToSend; i++) {
+				GameObject unit = GetObjectByName(actions[0], "Unit");
+				Delivery delivery = unit.GetComponent<Delivery>();
+				delivery.amout = TakeMoney();
+				delivery.goingTo = commandCenterPos;
+				player.AddUnit(unit, spawnPosition, spawnRotation);
+				yield return new WaitForSeconds(2);
+			}
+			yield return new WaitForSeconds (delay);
 		}
 	}
 

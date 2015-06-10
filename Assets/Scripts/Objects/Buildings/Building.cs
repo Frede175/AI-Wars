@@ -11,8 +11,8 @@ public class Building : WorldObjects {
 	protected float currentBuildProcess = 0;
 	private float buildTimeForUnit;
 	private float maxBuildTime;
-	private Vector3 spawnPosition;
-	private Quaternion spawnRotation;
+	protected Vector3 spawnPosition;
+	protected Quaternion spawnRotation;
 
 
 	protected override void Awake() {
