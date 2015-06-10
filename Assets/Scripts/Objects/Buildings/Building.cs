@@ -133,7 +133,7 @@ public class Building : WorldObjects {
 		base.MouseClick(controller, hitObject, hitPoint);
 	}
 
-	public void Buy(Player controller)
+	public virtual void TakeOver(Player controller)
 	{
 		if (isBought)
 			return;

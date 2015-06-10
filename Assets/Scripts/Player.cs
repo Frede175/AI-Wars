@@ -47,7 +47,7 @@ public class Player : MonoBehaviour{
 		Buildings buildings = GetComponentInChildren<Buildings>();
 		building.transform.parent = buildings.transform;
 		Building b = building.GetComponent<Building> ();
-		b.Buy (this);
+		b.TakeOver (this);
 
 	}
 

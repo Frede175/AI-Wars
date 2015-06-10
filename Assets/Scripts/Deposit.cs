@@ -6,6 +6,7 @@ public class Deposit : Building {
 
 	public int moneyLeft;
 	public int transfereSpeed;
+	public int delay;
 	public Transform[] blocks;
 
 	private bool isEmpty;
@@ -13,7 +14,8 @@ public class Deposit : Building {
 
 	private int numberOfBlocksDisplayed;
 	private Vector3 test;
-
+	
+	private int numberOfUnitsToSend = 3;
 
 	protected override void Start () {
 		base.Start();
@@ -21,6 +23,7 @@ public class Deposit : Building {
 		isEmpty = moneyLeft >= 0;
 		transfereSpeed = ResourceManager.moneyTransfereSpeed;
 		blocks = new Transform[4];
+		actions = new string[] {"Collector"};
 		for (int i = 0; i < 4; i++)
 		{
 			blocks[i] = transform.GetChild(i);
@@ -88,6 +91,24 @@ public class Deposit : Building {
 		Vector3 position = transform.position + transform.up * (selectionBounds.max.y - selectionBounds.min.y)/2;
 		test = position; //Testing
 
+	}
+
+	public override void TakeOver(Player controller)
+	{
+		base.TakeOver (controller);
+
+	}
+
+	IEnumerator SendMoney()
+	{
+		yield break;
+	}
+
+	private void SpawnUnits()
+	{
+		for (int i = 0; i < numberOfUnitsToSend; i++) {
+			GameObject unit = ResourceManager.GetUnit(actions[0]);
+		}
 	}
 
 

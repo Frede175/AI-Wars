@@ -23,7 +23,8 @@ namespace RTS
 		}
 
 		public static int moneyPerDeposit { get { return 400; } }
-		public static int moneyTransfereSpeed { get { return 5; } }
+		public static int moneyTransfereSpeed { get { return 3; } }
+		public static int moneyDelay { get { return 10; } } 
 
 		//GUI
 		private static GUISkin guiSelectBox;
