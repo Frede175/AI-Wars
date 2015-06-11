@@ -109,7 +109,6 @@ public class Deposit : Building {
 	public override void TakeOver(Player controller)
 	{
 		base.TakeOver (controller);
-		commandCenterPos = player.commandCenterObj.transform.position;
 		StartCoroutine("SendMoney");
 	}
 

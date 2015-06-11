@@ -6,6 +6,7 @@ using System;
 public class Pathfinding : MonoBehaviour {
 
 	public bool simple = true;
+	public bool debug;
 	Map map;
 	PathManager pathManager;
 
@@ -33,6 +34,16 @@ public class Pathfinding : MonoBehaviour {
 
 		if (!startNode.isWalkable && !targetNode.isWalkable)
 			yield break;
+
+
+		if (IsInView(startNode, targetNode))
+		{
+			waypoints = new Vector2[] {targetPos};
+			success = true;
+			pathManager.FinishedProcessingPath(waypoints, success);
+			yield break;
+		}
+
 
 		Heap<Node> openSet = new Heap<Node>(map.MaxSize);
 		HashSet<Node> closedSet = new HashSet<Node>();
@@ -110,16 +121,23 @@ public class Pathfinding : MonoBehaviour {
 	Vector2[] simplePath(List<Node> path, Vector2 targetPos)
 	{
 		List<Vector2> waypoints = new List<Vector2>();
-		Vector2 dirOld = Vector2.zero;
+		Vector2 inSight = path[1].worldPos;
+		int b = 0;
 		waypoints.Add(path[0].worldPos);
 		for (int a = 1; a < path.Count; a++)
 		{
-			Vector2 dirNew = new Vector2 (path[a].nodeX - path[a-1].nodeX, path[a].nodeY - path[a-1].nodeY);
-			if (dirNew != dirOld)
+			if (IsInView(path[b], path[a]))
 			{
-				waypoints.Add(path[a].worldPos);
+				inSight = path[a].worldPos;
 			}
-			dirOld = dirNew;
+			else
+			{
+				waypoints.Add(inSight);
+				inSight = Vector3.zero;
+				b = a;
+			}
+
+
 		}
 		waypoints[0] = targetPos;
 		return waypoints.ToArray();
@@ -144,6 +162,21 @@ public class Pathfinding : MonoBehaviour {
 			return 14 * distanceY + 10 * (distanceX - distanceY);
 		return 14 * distanceX + 10 * (distanceY - distanceX);
 
+	}
+
+	bool IsInView(Node nodeA, Node NodeB)
+	{
+		Vector3 direction = new Vector3(NodeB.worldPos.x, NodeB.worldPos.y, -0.5f) - new Vector3(nodeA.worldPos.x,nodeA.worldPos.y, -0.5f);
+		float distance = Vector3.Distance(nodeA.worldPos, NodeB.worldPos);
+
+		if (debug)
+			Debug.DrawRay(new Vector3(nodeA.worldPos.x,nodeA.worldPos.y, -0.5f), direction, Color.blue, 4);
+
+		if (Physics.Raycast(new Ray (new Vector3(nodeA.worldPos.x,nodeA.worldPos.y, -0.5f), direction), distance, map.noneWalkable))
+		{
+			return false;
+		}
+		return true;
 	}
 
 

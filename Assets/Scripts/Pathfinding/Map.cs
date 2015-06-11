@@ -33,6 +33,22 @@ public class Map : MonoBehaviour {
 		MakeGrid();
 	}
 
+	void Update()
+	{
+		UpdateMap();
+	}
+
+	void UpdateMap()
+	{
+		for (int x = 0; x < gridX; x++)
+		{
+			for (int y = 0; y < gridY; y++)
+			{
+				nodes[x,y].isWalkable = !(Physics.CheckSphere(new Vector3(nodes[x,y].worldPos.x, nodes[x,y].worldPos.y, 0), gridRadius, noneWalkable));
+			}
+		}
+	}
+
 	public int MaxSize
 	{
 		get {
